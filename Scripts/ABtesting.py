@@ -73,23 +73,22 @@ class ABTesting:
     
     # For classical testing
     def min_sample_size(self, bcr, mde, power=0.8, sig_level=0.05):
-    """Returns the minimum sample size to set up a split test
-    Arguments:
-        bcr (float): probability of success for control, sometimes
-        referred to as baseline conversion rate
-        mde (float): minimum change in measurement between control
-        group and test group if alternative hypothesis is true, sometimes
-        referred to as minimum detectable effect
-        power (float): probability of rejecting the null hypothesis when the
-        null hypothesis is false, typically 0.8
-        sig_level (float): significance level often denoted as alpha,
-        typically 0.05
-    Returns:
-        min_N: minimum sample size (float)
-    References:
-        Stanford lecture on sample sizes
-        http://statweb.stanford.edu/~susan/courses/s141/hopower.pdf
-    """
+        """Returns the minimum sample size to set up a split test Arguments:
+            bcr (float): probability of success for control, sometimes
+            referred to as baseline conversion rate
+            mde (float): minimum change in measurement between control
+            group and test group if alternative hypothesis is true, sometimes
+            referred to as minimum detectable effect
+            power (float): probability of rejecting the null hypothesis when the
+            null hypothesis is false, typically 0.8
+            sig_level (float): significance level often denoted as alpha,
+            typically 0.05
+        Returns:
+            min_N: minimum sample size (float)
+        References:
+            Stanford lecture on sample sizes
+            http://statweb.stanford.edu/~susan/courses/s141/hopower.pdf
+        """
     # standard normal distribution to determine z-values
         standard_norm = scs.norm(0, 1)
 
@@ -104,4 +103,4 @@ class ABTesting:
 
         min_N = (2 * pooled_prob * (1 - pooled_prob) * (Z_beta + Z_alpha)**2/ mde**2)
 
-    return min_N
+        return min_N
