@@ -26,7 +26,8 @@ First we will experiment with classical frequnetist techniques, and then we move
 
 ## MLOps Design
 
-![mlops design](images/mlops.png)
+![image](https://user-images.githubusercontent.com/39389971/169132509-958aad9a-84da-40da-ab7a-5b1afecacc5c.png)
+
 
 ## Contributors
 
