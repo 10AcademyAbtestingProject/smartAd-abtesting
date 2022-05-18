@@ -1,3 +1,4 @@
+import scipy.stats as scs
 class ABTesting:
     def _init_(self):
         """
@@ -89,16 +90,16 @@ class ABTesting:
             Stanford lecture on sample sizes
             http://statweb.stanford.edu/~susan/courses/s141/hopower.pdf
         """
-    # standard normal distribution to determine z-values
+        # standard normal distribution to determine z-values
         standard_norm = scs.norm(0, 1)
 
-    # find Z_beta from desired power
+        # find Z_beta from desired power
         Z_beta = standard_norm.ppf(power)
 
-    # find Z_alpha
+        # find Z_alpha
         Z_alpha = standard_norm.ppf(1-sig_level/2)
 
-    # average of probabilities from both groups
+        # average of probabilities from both groups
         pooled_prob = (bcr + bcr+mde) / 2
 
         min_N = (2 * pooled_prob * (1 - pooled_prob) * (Z_beta + Z_alpha)**2/ mde**2)
