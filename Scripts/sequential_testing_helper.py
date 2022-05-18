@@ -16,9 +16,9 @@ class Sequential_AB_Helper:
     def plot_cumulative(self, upper_limit, lower_limit, r, x1):
         plt.plot(r, upper_limit, color='green',
                  linewidth=1, label='Upper Bound')
-        plt.plot(r, lower_limit, color='blue',
+        plt.plot(r, lower_limit, color='red',
                  linewidth=1, label='Lower Bound')
-        plt.plot(r, x1, color='orange', linewidth=1,
+        plt.plot(r, x1, color='yellow', linewidth=1,
                  label='Cumulative value of yes and no')
         plt.legend()
         plt.show()
