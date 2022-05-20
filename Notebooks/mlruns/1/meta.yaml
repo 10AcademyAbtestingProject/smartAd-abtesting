@@ -1,0 +1,4 @@
+artifact_location: file:///home/hat/dev-env/10Acadamy/week_2/organization/smartAd-abtesting/Notebooks/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: Logistic regression model
