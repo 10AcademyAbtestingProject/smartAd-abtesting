@@ -27,7 +27,15 @@ First we will experiment with classical frequnetist techniques, and then we move
 ## MLOps Design
 
 ![image](https://user-images.githubusercontent.com/39389971/169132509-958aad9a-84da-40da-ab7a-5b1afecacc5c.png)
+---
 
+## Steps to work with this repo
+
+1. clone the repo
+2. create a new environment and install the `requirements.txt`
+3. run `dvc pull` to get the dataset and model files
+4. use the `Notebooks/logistic_regression.ipynb` notebook as an example for accessing data and training a model
+5. use good names for the mlflow experiment name and run names. Experiment name should be prefixed with our names.(we can discuss this)
 
 ## Contributors
 
