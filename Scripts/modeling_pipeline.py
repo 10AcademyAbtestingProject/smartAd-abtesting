@@ -65,6 +65,8 @@ class TrainingPipeline(Pipeline):
                     mlflow.log_param(name, run_params[name])
             for name in run_metrics:
                 mlflow.log_metric(name, run_metrics[name])
+            
+            mlflow.log_param("columns", X_test.columns.to_list())
         model_name = self.make_model_name(experiment_name, run_name)
         mlflow.sklearn.log_model(
             sk_model=self.__pipeline, artifact_path='models', registered_model_name=model_name)
