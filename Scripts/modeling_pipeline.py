@@ -14,7 +14,8 @@ from sklearn.metrics import (accuracy_score,
                              log_loss,
                              precision_score,
                              recall_score)
-
+import dvc.api
+import io
 import mlflow
 import time
 
@@ -148,16 +149,16 @@ class TrainingPipeline(Pipeline):
 
     def plot_feature_importance(self, feature_importance):
         importance = pd.DataFrame({
-            'features': feature_importance.keys(), 
+            'features': feature_importance.keys(),
             'importance_score': feature_importance.values()
-                        })
-        fig = plt.figure(figsize=[12,8])
+        })
+        fig = plt.figure(figsize=[12, 8])
         ax = sns.barplot(x=importance['features'],
                          y=importance['importance_score'])
         ax.set_title("Feature's importance")
         ax.set_xlabel("Features", fontsize=20)
         ax.set_ylabel("Importance", fontsize=20)
-        ax.set_xticklabels(ax.get_xticklabels(),rotation = 45)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
 
         # ax.show()
         # figure = ax.get_figure()
@@ -196,6 +197,16 @@ def get_pipeline(model, x):
     ])
 
     return train_pipeline
+
+
+def dvc_get_data(path, version='v3'):
+    repo = "../"
+    content = dvc.api.read(path=path,
+                           repo=repo,
+                           rev=version)
+    df = pd.read_csv(io.StringIO(content), sep=",")
+
+    return df
 
 
 def run_train_pipeline(model, x, y, experiment_name, run_name):
