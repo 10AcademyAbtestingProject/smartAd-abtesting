@@ -25,12 +25,12 @@ jobs:
           echo "## Plots" >> report.md
 
           echo "### Class confusions" >> report.md
-          cml publish ${{ github.workspace }}/images/confusion_matrix.png --md >> report.md
+          cml publish images/confusion_matrix.png --md >> report.md
           
           echo "### Predicted vs Label" >> report.md
-          cml publish ${{ github.workspace }}/images/predictions_plot.png --md >> report.md
+          cml publish images/predictions_plot.png --md >> report.md
 
           echo "### Feature Importance" >> report.md
-          cml publish ${{ github.workspace }}/images/feature_importance.png --md >> report.md
+          cml publish images/feature_importance.png --md >> report.md
 
           cml send-comment report.md
