@@ -116,8 +116,8 @@ class TrainingPipeline(Pipeline):
         # model_name = self.make_model_name(experiment_name, run_name)
         # mlflow.sklearn.log_model(
         #     sk_model=self.__pipeline, artifact_path='models', registered_model_name=model_name)
-        # print('Run - %s is logged to Experiment - %s' %
-        #       (run_name, experiment_name))
+        print('Run - %s is logged to Experiment - %s' %
+              (run_name, experiment_name))
         return run_metrics
 
     def plot_preds(self, y_test, y_preds, model_name):
