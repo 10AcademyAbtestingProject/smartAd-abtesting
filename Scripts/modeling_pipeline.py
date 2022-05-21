@@ -94,28 +94,28 @@ class TrainingPipeline(Pipeline):
         print(run_metrics)
         print(feature_importance)
 
-        # mlflow.set_experiment(experiment_name)
-        # mlflow.set_tracking_uri('http://localhost:5000')
-        # with mlflow.start_run(run_name=run_name):
-        #     if run_params:
-        #         for name in run_params:
-        #             mlflow.log_param(name, run_params[name])
-        #     for name in run_metrics:
-        #         mlflow.log_metric(name, run_metrics[name])
+        mlflow.set_experiment(experiment_name)
+        mlflow.set_tracking_uri('http://localhost:5000')
+        with mlflow.start_run(run_name=run_name):
+            if run_params:
+                for name in run_params:
+                    mlflow.log_param(name, run_params[name])
+            for name in run_metrics:
+                mlflow.log_metric(name, run_metrics[name])
 
-        #     mlflow.log_param("columns", X_test.columns.to_list())
-        #     mlflow.log_figure(pred_plot, "predictions_plot.png")
-        #     mlflow.log_figure(cm_plot, "confusion_matrix.png")
-        #     mlflow.log_figure(feature_importance_plot,
-        #                       "feature_importance.png")
-        #     pred_plot.savefig("../images/predictions_plot.png")
-        #     cm_plot.savefig("../images/confusion_matrix.png")
-        #     feature_importance_plot.savefig("../images/feature_importance.png")
-        #     mlflow.log_dict(feature_importance, "feature_importance.json")
+            mlflow.log_param("columns", X_test.columns.to_list())
+            mlflow.log_figure(pred_plot, "predictions_plot.png")
+            mlflow.log_figure(cm_plot, "confusion_matrix.png")
+            mlflow.log_figure(feature_importance_plot,
+                              "feature_importance.png")
+            pred_plot.savefig("../images/predictions_plot.png")
+            cm_plot.savefig("../images/confusion_matrix.png")
+            feature_importance_plot.savefig("../images/feature_importance.png")
+            mlflow.log_dict(feature_importance, "feature_importance.json")
 
-        # model_name = self.make_model_name(experiment_name, run_name)
-        # mlflow.sklearn.log_model(
-        #     sk_model=self.__pipeline, artifact_path='models', registered_model_name=model_name)
+        model_name = self.make_model_name(experiment_name, run_name)
+        mlflow.sklearn.log_model(
+            sk_model=self.__pipeline, artifact_path='models', registered_model_name=model_name)
         print('Run - %s is logged to Experiment - %s' %
               (run_name, experiment_name))
         return run_metrics
