@@ -15,7 +15,8 @@ jobs:
       - name: Train model
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |          
+        run: |     
+          git config --global --add safe.directory /__w/smartAd-abtesting/smartAd-abtesting     
 
           # Report metrics
           echo "## Metrics" >> report.md
