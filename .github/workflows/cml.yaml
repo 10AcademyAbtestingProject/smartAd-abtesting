@@ -1,11 +1,7 @@
 name: model-metrics
 on:
-  push:
-    branches:
-      - "main"
   pull_request:
-    branches:
-      - "main"
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -17,20 +13,19 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |     
           
-          echo "## Metrics" >> report.md
+          echo "# Metrics" > report.md
           
-          
-
-          # Publish confusion matrix diff
           echo "## Plots" >> report.md
 
           echo "### Class confusions" >> report.md
-          # cml publish images/confusion_matrix.png --md >> report.md
+          # cml publish ./images/confusion_matrix.png --md >> report.md
           
           echo "### Predicted vs Label" >> report.md
-          # cml publish images/predictions_plot.png --md >> report.md
+          # cml publish ./images/predictions_plot.png --md >> report.md
 
           echo "### Feature Importance" >> report.md
-          # cml publish images/feature_importance.png --md >> report.md
+          # cml publish ./images/feature_importance.png --md >> report.md
 
+          # cat report.md
           cml send-comment report.md
+
