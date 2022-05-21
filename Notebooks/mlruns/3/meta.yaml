@@ -1,0 +1,4 @@
+artifact_location: file:///C:/Users/Hewan%20M/smartAd-abtesting/Notebooks/mlruns/3
+experiment_id: '3'
+lifecycle_stage: active
+name: Random Forest with cleaned data
