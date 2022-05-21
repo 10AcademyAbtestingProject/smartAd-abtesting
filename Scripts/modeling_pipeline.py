@@ -106,11 +106,12 @@ class TrainingPipeline(Pipeline):
             mlflow.log_param("columns", X_test.columns.to_list())
             mlflow.log_figure(pred_plot, "predictions_plot.png")
             mlflow.log_figure(cm_plot, "confusion_matrix.png")
-            mlflow.log_figure(feature_importance_plot,
-                              "feature_importance.png")
+            mlflow.log_figure(feature_importance_plot, "feature_importance.png")
+            
             pred_plot.savefig("../images/predictions_plot.png")
             cm_plot.savefig("../images/confusion_matrix.png")
             feature_importance_plot.savefig("../images/feature_importance.png")
+            mlflow.log_artifact("../images/feature_importance.png", "artifacts/feature_importance.png")
             mlflow.log_dict(feature_importance, "feature_importance.json")
 
         model_name = self.make_model_name(experiment_name, run_name)
@@ -122,7 +123,7 @@ class TrainingPipeline(Pipeline):
 
     def plot_preds(self, y_test, y_preds, model_name):
         N = len(y_test)
-        figure = plt.figure(figsize=(10, 5))
+        figure = plt.figure(figsize=(8, 5))
         original = plt.scatter(np.arange(1, N+1), y_test, c='blue')
         prediction = plt.scatter(np.arange(1, N+1), y_preds, c='red')
         plt.xticks(np.arange(1, N+1))
@@ -132,19 +133,19 @@ class TrainingPipeline(Pipeline):
         plt.title(title, fontsize=25)
         plt.legend((original, prediction),
                    ('Original', 'Prediction'), fontsize=20)
-        plt.show()
+        # plt.show()
         return figure
 
     def plot_confusion_matrix(self, actual, y_preds):
         # plot_confusion_matrix(model, actual, y_preds)
         # plt.show()
-        figure = plt.figure(figsize=(12, 8))
+        figure = plt.figure(figsize=(8, 5))
         conf_matrix = confusion_matrix(actual, y_preds)
         sns.heatmap(conf_matrix / np.sum(conf_matrix), annot=True, fmt='.2%')
-        plt.title('Confusion matrix', fontsize=30, fontweight='bold')
-        plt.ylabel('True Label', fontsize=25)
-        plt.xlabel('Predicted Label', fontsize=25)
-        plt.show()
+        plt.title('Confusion matrix', fontsize=25, fontweight='bold')
+        plt.ylabel('True Label', fontsize=20)
+        plt.xlabel('Predicted Label', fontsize=20)
+        # plt.show()
         return figure
 
     def plot_feature_importance(self, feature_importance):
@@ -152,7 +153,7 @@ class TrainingPipeline(Pipeline):
             'features': feature_importance.keys(),
             'importance_score': feature_importance.values()
         })
-        fig = plt.figure(figsize=[12, 8])
+        fig = plt.figure(figsize=[8, 5])
         ax = sns.barplot(x=importance['features'],
                          y=importance['importance_score'])
         ax.set_title("Feature's importance")
