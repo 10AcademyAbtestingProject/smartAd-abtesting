@@ -15,13 +15,14 @@ jobs:
       - name: Train model
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GDRIVE_TOKEN: ${{ secrets.DVC_GDRIVE_TOKEN }}
         run: |
           # Install requirements
-          pip install -r requirements.txt
+          # pip install -r requirements.txt
 
           # Pull data & run-cache from GDrice and reproduce pipeline
-          dvc pull --run-cache
+          # dvc pull --run-cache
+          # env:
+            # GDRIVE_CREDENTIALS_DATA: ${{ secrets.DVC_GDRIVE_TOKEN }}
           
 
           # Report metrics
