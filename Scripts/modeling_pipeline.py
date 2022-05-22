@@ -47,7 +47,10 @@ class TrainingPipeline(Pipeline):
         acc = accuracy_score(y_true, y_pred)
         prec = precision_score(y_true, y_pred)
         recall = recall_score(y_true, y_pred)
+        # entropy = None
+        # if isinstance(y_pred_prob, None):
         entropy = log_loss(y_true, y_pred_prob)
+        
         cm = confusion_matrix(y_true, y_pred)
         true_pos = cm[0][0]
         true_neg = cm[1][1]
@@ -73,7 +76,7 @@ class TrainingPipeline(Pipeline):
             feature_importance = model.feature_importances_
         feature_array = {}
         for i, v in enumerate(feature_importance):
-            feature_array[x.columns[i]] = v
+            feature_array[x.columns[i]] = round(float(v), 2)
         return feature_array
 
     def make_model_name(self, experiment_name, run_name):
@@ -83,7 +86,10 @@ class TrainingPipeline(Pipeline):
     def log_model(self, model_key, X_test, y_test, experiment_name, run_name, run_params=None):
         model = self.__pipeline.get_params()[model_key]
         y_pred = self.__pipeline.predict(X_test)
+        # try:
         y_pred_prob = self.__pipeline.predict_proba(X_test)
+        # except AttributeError:
+        # y_pred_prob = None
         run_metrics = self.get_metrics(y_test, y_pred, y_pred_prob)
         feature_importance = self.get_feature_importance(
             model, X_test)
@@ -107,11 +113,11 @@ class TrainingPipeline(Pipeline):
             mlflow.log_figure(pred_plot, "predictions_plot.png")
             mlflow.log_figure(cm_plot, "confusion_matrix.png")
             mlflow.log_figure(feature_importance_plot, "feature_importance.png")
-            
+            print("Saving figures")
             pred_plot.savefig("../images/predictions_plot.png")
             cm_plot.savefig("../images/confusion_matrix.png")
             feature_importance_plot.savefig("../images/feature_importance.png")
-            mlflow.log_artifact("../images/feature_importance.png", "artifacts/feature_importance.png")
+            mlflow.log_artifact("../images/feature_importance.png", "metrics_plots")
             mlflow.log_dict(feature_importance, "feature_importance.json")
 
         model_name = self.make_model_name(experiment_name, run_name)
@@ -133,7 +139,7 @@ class TrainingPipeline(Pipeline):
         plt.title(title, fontsize=25)
         plt.legend((original, prediction),
                    ('Original', 'Prediction'), fontsize=20)
-        # plt.show()
+        plt.show()
         return figure
 
     def plot_confusion_matrix(self, actual, y_preds):
@@ -145,7 +151,7 @@ class TrainingPipeline(Pipeline):
         plt.title('Confusion matrix', fontsize=25, fontweight='bold')
         plt.ylabel('True Label', fontsize=20)
         plt.xlabel('Predicted Label', fontsize=20)
-        # plt.show()
+        plt.show()
         return figure
 
     def plot_feature_importance(self, feature_importance):
@@ -161,7 +167,7 @@ class TrainingPipeline(Pipeline):
         ax.set_ylabel("Importance", fontsize=20)
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
 
-        # ax.show()
+        
         # figure = ax.get_figure()
         return fig
 
@@ -190,7 +196,7 @@ def get_pipeline(model, x):
     preprocessor = ColumnTransformer(
         transformers=[
             ('num', numerical_transformer, num_cols),
-            # ('cat', categorical_transformer, cat_cols)
+            ('cat', categorical_transformer, cat_cols)
         ])
     train_pipeline = TrainingPipeline(steps=[
         ('preprocessor', preprocessor),

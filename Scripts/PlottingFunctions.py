@@ -5,7 +5,7 @@ import numpy as np
 import scipy.stats as scs
 import matplotlib.pyplot as plt
 
-from ABTesting import ABTesting
+from Scripts.ABtesting import ABTesting
 ABT = ABTesting()
 
 class PlottingFunctions:
