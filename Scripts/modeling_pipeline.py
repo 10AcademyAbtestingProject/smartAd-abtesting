@@ -91,8 +91,8 @@ class TrainingPipeline(Pipeline):
             feature_importance)
         pred_plot = self.plot_preds(y_test, y_pred, experiment_name)
         cm_plot = self.plot_confusion_matrix(y_test, y_pred)
-        # print(run_metrics)
-        # print(feature_importance)
+        print(run_metrics)
+        print(feature_importance)
 
         mlflow.set_experiment(experiment_name)
         mlflow.set_tracking_uri('http://localhost:5000')
@@ -180,7 +180,7 @@ def get_pipeline(model, x):
         x)   # Remove the target column
 
     categorical_transformer = Pipeline(steps=[
-        ('onehot', OneHotEncoder(handle_unknown='ignore', max_categories=15))
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))
     ])
     numerical_transformer = Pipeline(steps=[
         ('scale', StandardScaler())
@@ -199,7 +199,7 @@ def get_pipeline(model, x):
     return train_pipeline
 
 
-def dvc_get_data(path, version='v3'):
+def dvc_get_data(path, version='72d1bf77e90769aaef56e18685215ddc98af3343'):
     repo = "../"
     content = dvc.api.read(path=path,
                            repo=repo,
