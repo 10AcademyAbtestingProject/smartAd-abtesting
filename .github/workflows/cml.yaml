@@ -1,31 +1,16 @@
 name: model-metrics
-on:
-  pull_request:
-
+on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
-    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v2
-      - name: Show metrics
+      - uses: iterative/setup-cml@v1
+      - name: Metrics
+
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |     
-          
-          echo "# Metrics" > report.md
-          
-          echo "## Plots" >> report.md
-
-          echo "### Class confusions" >> report.md
-          # cml publish ./images/confusion_matrix.png --md >> report.md
-          
-          echo "### Predicted vs Label" >> report.md
-          # cml publish ./images/predictions_plot.png --md >> report.md
-
-          echo "### Feature Importance" >> report.md
-          # cml publish ./images/feature_importance.png --md >> report.md
-
-          # cat report.md
+        run: |
+          echo "# Metrics" >> report.md
+          echo "# Confusion Matrix" >> report.md
           cml send-comment report.md
-
