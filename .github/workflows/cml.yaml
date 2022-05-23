@@ -5,12 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
       - uses: iterative/setup-cml@v1
-      - name: Metrics
-
+      - name: Get model metrics
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          pip install -r requirements.txt
           echo "# Metrics" >> report.md
           echo "# Confusion Matrix" >> report.md
           cml send-comment report.md
