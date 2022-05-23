@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 artifact_location: file:///C:/Users/Hewan%20M/smartAd-abtesting/Notebooks/mlruns/3
 experiment_id: '3'
 lifecycle_stage: active
 name: Random Forest with cleaned data
+=======
+artifact_location: file:///home/hat/dev-env/10Acadamy/week_2/organization/smartAd-abtesting/Notebooks/mlruns/3
+experiment_id: '3'
+lifecycle_stage: active
+name: full cleaned dataset
+>>>>>>> a78e827080bd7f94360ee38b5c883464f6f3e3ed

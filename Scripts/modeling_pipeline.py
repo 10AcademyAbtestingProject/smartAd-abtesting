@@ -47,7 +47,10 @@ class TrainingPipeline(Pipeline):
         acc = accuracy_score(y_true, y_pred)
         prec = precision_score(y_true, y_pred)
         recall = recall_score(y_true, y_pred)
+        # entropy = None
+        # if isinstance(y_pred_prob, None):
         entropy = log_loss(y_true, y_pred_prob)
+        
         cm = confusion_matrix(y_true, y_pred)
         true_pos = cm[0][0]
         true_neg = cm[1][1]
@@ -73,7 +76,7 @@ class TrainingPipeline(Pipeline):
             feature_importance = model.feature_importances_
         feature_array = {}
         for i, v in enumerate(feature_importance):
-            feature_array[x.columns[i]] = v
+            feature_array[x.columns[i]] = round(float(v), 2)
         return feature_array
 
     def make_model_name(self, experiment_name, run_name):
@@ -83,7 +86,10 @@ class TrainingPipeline(Pipeline):
     def log_model(self, model_key, X_test, y_test, experiment_name, run_name, run_params=None):
         model = self.__pipeline.get_params()[model_key]
         y_pred = self.__pipeline.predict(X_test)
+        # try:
         y_pred_prob = self.__pipeline.predict_proba(X_test)
+        # except AttributeError:
+        # y_pred_prob = None
         run_metrics = self.get_metrics(y_test, y_pred, y_pred_prob)
         feature_importance = self.get_feature_importance(
             model, X_test)
@@ -100,19 +106,24 @@ class TrainingPipeline(Pipeline):
             if run_params:
                 for name in run_params:
                     mlflow.log_param(name, run_params[name])
+            print("Run params saved")
             for name in run_metrics:
                 mlflow.log_metric(name, run_metrics[name])
-
+            print("Run metrics saved")
             mlflow.log_param("columns", X_test.columns.to_list())
+            print("logging figures")
             mlflow.log_figure(pred_plot, "predictions_plot.png")
             mlflow.log_figure(cm_plot, "confusion_matrix.png")
-            mlflow.log_figure(feature_importance_plot,
-                              "feature_importance.png")
+            mlflow.log_figure(feature_importance_plot, "feature_importance.png")
+            print("figures saved with mlflow")
             pred_plot.savefig("../images/predictions_plot.png")
             cm_plot.savefig("../images/confusion_matrix.png")
             feature_importance_plot.savefig("../images/feature_importance.png")
+            print("figures saved")
+            mlflow.log_artifact("../images/feature_importance.png", "metrics_plots")
+            print("Saving artifacts")
             mlflow.log_dict(feature_importance, "feature_importance.json")
-
+            print("saving dict")
         model_name = self.make_model_name(experiment_name, run_name)
         mlflow.sklearn.log_model(
             sk_model=self.__pipeline, artifact_path='models', registered_model_name=model_name)
@@ -122,7 +133,7 @@ class TrainingPipeline(Pipeline):
 
     def plot_preds(self, y_test, y_preds, model_name):
         N = len(y_test)
-        figure = plt.figure(figsize=(10, 5))
+        figure = plt.figure(figsize=(8, 5))
         original = plt.scatter(np.arange(1, N+1), y_test, c='blue')
         prediction = plt.scatter(np.arange(1, N+1), y_preds, c='red')
         plt.xticks(np.arange(1, N+1))
@@ -138,12 +149,12 @@ class TrainingPipeline(Pipeline):
     def plot_confusion_matrix(self, actual, y_preds):
         # plot_confusion_matrix(model, actual, y_preds)
         # plt.show()
-        figure = plt.figure(figsize=(12, 8))
+        figure = plt.figure(figsize=(8, 5))
         conf_matrix = confusion_matrix(actual, y_preds)
         sns.heatmap(conf_matrix / np.sum(conf_matrix), annot=True, fmt='.2%')
-        plt.title('Confusion matrix', fontsize=30, fontweight='bold')
-        plt.ylabel('True Label', fontsize=25)
-        plt.xlabel('Predicted Label', fontsize=25)
+        plt.title('Confusion matrix', fontsize=25, fontweight='bold')
+        plt.ylabel('True Label', fontsize=20)
+        plt.xlabel('Predicted Label', fontsize=20)
         plt.show()
         return figure
 
@@ -152,7 +163,7 @@ class TrainingPipeline(Pipeline):
             'features': feature_importance.keys(),
             'importance_score': feature_importance.values()
         })
-        fig = plt.figure(figsize=[12, 8])
+        fig = plt.figure(figsize=[8, 5])
         ax = sns.barplot(x=importance['features'],
                          y=importance['importance_score'])
         ax.set_title("Feature's importance")
@@ -160,7 +171,7 @@ class TrainingPipeline(Pipeline):
         ax.set_ylabel("Importance", fontsize=20)
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
 
-        # ax.show()
+        
         # figure = ax.get_figure()
         return fig
 
@@ -189,7 +200,7 @@ def get_pipeline(model, x):
     preprocessor = ColumnTransformer(
         transformers=[
             ('num', numerical_transformer, num_cols),
-            # ('cat', categorical_transformer, cat_cols)
+            ('cat', categorical_transformer, cat_cols)
         ])
     train_pipeline = TrainingPipeline(steps=[
         ('preprocessor', preprocessor),
